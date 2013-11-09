@@ -3,7 +3,7 @@ headers = $(wildcard *.h)
 objects = $(sources:%.cpp=%.o)
 dependency = Makefile.dependencies
 CFLAGS += -g -Ilibrary
-CXXFLAGS += -g -Ilibrary
+CXXFLAGS += --std=c++0x -g -Ilibrary
 
 all: client
 

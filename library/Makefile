@@ -3,7 +3,7 @@ headers = $(wildcard *.h)
 objects = $(sources:%.cpp=%.o)
 dependency = Makefile.dependencies
 CFLAGS += -g
-CXXFLAGS += -g
+CXXFLAGS += -g --std=c++0x
 
 #Uncomment this line to get a boatload of debug output.
 #CPPFLAGS = -DSHOW_NETWORK
