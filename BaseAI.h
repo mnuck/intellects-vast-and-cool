@@ -22,6 +22,11 @@
 ///The provided AI class does just that.
 class BaseAI
 {
+
+friend class Murder;
+friend class Seige;
+friend class Trench;
+
 protected:
   Connection* c;
   std::vector<Player> players;
@@ -51,7 +56,7 @@ public:
   float oxygenRate();
   ///The number of turns until sediment is deposited on the trenches.
   int depositionRate();
-  
+
   BaseAI(Connection* c);
   virtual ~BaseAI();
   ///

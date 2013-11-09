@@ -17,7 +17,7 @@ class Task{
 
         virtual void action() = 0;
 
-    private:
+    protected:
         unsigned numUnits;
         Mappable obj;
         AI* ai;
