@@ -1,6 +1,7 @@
 #ifndef AI_H
 #define AI_H
 
+#include <unordered_map>
 #include "BaseAI.h"
 #include "Murder.h"
 #include "Trench.h"
@@ -18,7 +19,7 @@ public:
   virtual bool run();
   virtual void end();
 
-
+  std::unordered_map<int, Unit> unitMap;
 };
 
 #endif
