@@ -3,10 +3,6 @@
 
 #include <unordered_map>
 #include "BaseAI.h"
-#include "Murder.h"
-#include "Trench.h"
-#include "Defend.h"
-#include "Seige.h"
 
 ///The class implementing gameplay logic.
 class AI: public BaseAI
@@ -19,7 +15,6 @@ public:
   virtual bool run();
   virtual void end();
 
-  std::unordered_map<int, Unit> unitMap;
 };
 
 #endif
