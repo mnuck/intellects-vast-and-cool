@@ -34,44 +34,12 @@ enum
 
 static const std::vector<const char*> NAMES =
 {
-    "Code Smell",
-    "Simpleton Pattern",
-    "Death by Ungabunga",
-    "Feature Creep",
-    "Jebediah Kerman",
-    "Sunk Cost Fallacy",
-    "Voodoo Debugging",
-    "Law of Demeter",
-    "Dunning-Kruger Effect",
-    "Peter Principle",
-    "Last Argument of Kings",
-    "Intellects Vast and Cool",
-    "Mineshaft Gap",
-    "Flouridated Water",
-    "Mezzanine Chump",
-    "Leaf on the Wind",
-    "Big Damn Heroes",
-    "Moral Event Horizon",
-    "Man of Wealth and Taste",
-    "RMS's Left Sword",
-    "35 Minutes Ago",
-    "Need a Montage",
-    "Bigger Hammer",
-    "Kansas City Shuffle",
-    "Why a Spoon?",
-    "Han Shot First",
-    "Robe and Wizard Hat",
-    "For the Articles",
-    "Play the Player",
-    "The Real Slim Shady",
-    "Monty Haul Problem",
-    "Bizzaro Gordan Freeman",
-    "Snowdens of Yesteryear",
-    "P == NP",
-    "P != NP",
-    "Godwin's Law",
-    "Mittani Sends His Regards",
-    "Not a Smart Man"
+  "More Dakka",
+  "Lemmings with Lazers",
+  "BRB Fixing Arena (Again)",
+  "PEW PEW",
+  "Doctor Manhattan Distance",
+  "Not a Smart Man"
 };
 
 const char* get_name()
@@ -100,6 +68,12 @@ void AI::init(){}
 //Return true to end your turn, return false to ask the server for updated information.
 bool AI::run()
 {
+  tileMap.clear();
+  for (int i=0 ; i<tiles.size() ; ++i)
+  {
+    tileMap[Loc(tiles[i].x(), tiles[i].y())] = &(tiles[i]);
+  }
+
   for (Unit u: units)
   {
     u.touched = false;
@@ -108,13 +82,14 @@ bool AI::run()
   Player me = players[playerID()];
   Player him = players[abs(1 - playerID())];
 
+  vector<Loc> sadPump = findMySadPump();
+
   for (Unit u: units)
   {
     if (u.owner() != playerID())
     {
       Murder m(this);
       m.action(u);
-      break;
     }
   }
 
@@ -249,6 +224,89 @@ vector<Loc> AI::bfs(Loc start, Loc end, bool blockingWater, int moveSpeed)
     }
 
     return result;
+}
+
+vector<Loc> AI::findMySadPump()
+{
+  vector<Loc> result;
+  Loc next;
+
+
+  vector<Loc> isMyPump;
+  for (Tile t: tiles)
+  {
+    if (t.owner() == playerID() && t.pumpID() != -1)
+    {
+      isMyPump.push_back(Loc(t.x(), t.y()));
+    }
+  }
+
+
+  vector<Loc> adjacent;
+  vector<Loc> notAdjacent;
+
+  for (Loc current: isMyPump)
+  {
+    // north
+    if (current.y() > 0)
+    {
+      next = Loc(current.x(), current.y() - 1);
+      if (tileMap[next]->depth() > 1000)
+      {
+        adjacent.push_back(current);
+      }
+      else
+      {
+        notAdjacent.push_back(current);
+      }
+    }
+
+    // south
+    if (current.y() < mapHeight() - 1)
+    {
+      next = Loc(current.x(), current.y() + 1);
+      if (tileMap[next]->depth() > 1000)
+      {
+        adjacent.push_back(current);
+      }
+      else
+      {
+        notAdjacent.push_back(current);
+      }
+    }
+
+    // east
+    if (current.x() > 0)
+    {
+      next = Loc(current.x() - 1, current.y());
+      if (tileMap[next]->depth() > 1000)
+      {
+        adjacent.push_back(current);
+      }
+      else
+      {
+        notAdjacent.push_back(current);
+      }
+    }
+
+    // west
+    if (current.x() < mapWidth() - 1)
+    {
+      next = Loc(current.x() + 1, current.y());
+      if (tileMap[next]->depth() > 1000)
+      {
+        adjacent.push_back(current);
+      }
+      else
+      {
+        notAdjacent.push_back(current);
+      }
+    }
+  }
+
+
+
+  return result;
 }
 
 //This function is run once, after your last turn.

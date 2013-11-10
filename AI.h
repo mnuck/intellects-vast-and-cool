@@ -3,6 +3,7 @@
 
 #include <unordered_map>
 #include <vector>
+#include <map>
 #include "BaseAI.h"
 #include "Loc.h"
 
@@ -18,6 +19,8 @@ public:
   virtual void end();
 
   std::vector<Loc> bfs(Loc start, Loc end, bool blockingWater, int moveSpeed);
+  std::vector<Loc> findMySadPump();
+  std::map<Loc, Tile*> tileMap;
 };
 
 #endif
