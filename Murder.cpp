@@ -1,5 +1,9 @@
 #include "Murder.h"
 
 void Murder::action() {
-    ai->units[1];
+    for(int i = 0; i < ai->units.size(); i++){
+
+    }
 }
+
+

@@ -4,10 +4,6 @@
 #include <unordered_map>
 #include <vector>
 #include "BaseAI.h"
-#include "Murder.h"
-#include "Trench.h"
-#include "Defend.h"
-#include "Seige.h"
 #include "Loc.h"
 
 ///The class implementing gameplay logic.

@@ -11,6 +11,7 @@ class Task{
         Task()
         : numUnits(0)
         , obj()
+        , ai(NULL)
         {}
 
         ~Task() {}

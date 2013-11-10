@@ -103,6 +103,10 @@ void AI::init(){}
 //Return true to end your turn, return false to ask the server for updated information.
 bool AI::run()
 {
+  for(int i = 0; i < units.size(); i++) {
+      units[i].touched = false;
+  }
+
   Player me = players[playerID()];
   Player him = players[abs(1 - playerID())];
   for (Unit u: units)
