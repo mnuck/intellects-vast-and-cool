@@ -6,15 +6,12 @@
 
 #include "AI.h"
 #include "util.h"
+#include "Murder.h"
 
 using std::cout;
 using std::endl;
 using std::vector;
 
-int manhattanDistance(Loc start, Loc end)
-{
-  return abs(start.x() - end.x()) + abs(start.y() - end.y());
-}
 
 namespace std {
   template <> struct hash<Loc>
@@ -103,36 +100,21 @@ void AI::init(){}
 //Return true to end your turn, return false to ask the server for updated information.
 bool AI::run()
 {
-  for(int i = 0; i < units.size(); i++) {
-      units[i].touched = false;
+  for (Unit u: units)
+  {
+    u.touched = false;
   }
 
   Player me = players[playerID()];
   Player him = players[abs(1 - playerID())];
+
   for (Unit u: units)
   {
-    if (u.owner() == playerID())
+    if (u.owner() != playerID())
     {
-      int x = u.x();
-      int y = u.y();
-      int choice = rand() % 4;
-      switch (choice)
-      {
-        case 0:
-          u.move(x+1, y);
-          break;
-        case 1:
-          u.move(x-1, y);
-          break;
-        case 2:
-          u.move(x, y+1);
-          break;
-        case 3:
-          u.move(x, y-1);
-          break;
-        default:
-          break;
-      }
+      Murder m(this);
+      m.action(u);
+      break;
     }
   }
 
@@ -144,7 +126,6 @@ bool AI::run()
       {
         if (me.oxygen() >= unitTypes[WORKER].cost())
         {
-          cout << "SPAWNIN A DOOD" << endl;
           t.spawn(WORKER);
         }
       }
@@ -170,7 +151,7 @@ vector<Loc> AI::bfs(Loc start, Loc end, bool blockingWater, int moveSpeed)
     {
       for (int y = 0 ; y < mapHeight() ; ++y)
       {
-        blockingGrid[Loc(x, y)] = available; // not blocking
+        blockingGrid[Loc(x, y)] = available;
       }
     }
 
@@ -179,7 +160,10 @@ vector<Loc> AI::bfs(Loc start, Loc end, bool blockingWater, int moveSpeed)
     {
       if (manhattanDistance(start, Loc(u.x(), u.y())) <= moveSpeed)
       {
-        blockingGrid[Loc(u.x(), u.y())] = blocking; // blocking
+        if (Loc(u.x(), u.y()) != end)
+        {
+          blockingGrid[Loc(u.x(), u.y())] = blocking;
+        }
       }
     }
 
@@ -187,15 +171,18 @@ vector<Loc> AI::bfs(Loc start, Loc end, bool blockingWater, int moveSpeed)
     {
       if (blockingWater && t.waterAmount() > 0)
       {
-        blockingGrid[Loc(t.x(), t.y())] = blocking; // blocking
+        blockingGrid[Loc(t.x(), t.y())] = blocking;
       }
       if (t.owner() == 3) // ice
       {
-        blockingGrid[Loc(t.x(), t.y())] = blocking; // blocking
+        blockingGrid[Loc(t.x(), t.y())] = blocking;
       }
-      if (t.owner() != playerID() && t.pumpID() == -1)
+      if (t.owner() == (1 - playerID()) && t.pumpID() == -1) // his spawn point
       {
-        blockingGrid[Loc(t.x(), t.y())] = blocking; // blocking
+        if (Loc(t.x(), t.y()) != end)
+        {
+          blockingGrid[Loc(t.x(), t.y())] = blocking;
+        }
       }
     }
 
@@ -210,7 +197,7 @@ vector<Loc> AI::bfs(Loc start, Loc end, bool blockingWater, int moveSpeed)
       {
         while (current != start)
         {
-          result.push_back(current);
+          result.insert(result.begin(), current);
           current = blockingGrid[current];
         }
         break;
@@ -263,21 +250,6 @@ vector<Loc> AI::bfs(Loc start, Loc end, bool blockingWater, int moveSpeed)
 
     return result;
 }
-
-
-/*
-
-start = get_start()
-frontier = [start]
-while frontier
-  current = frontier.pop
-  if is_goal_state(current)
-    break
-  neighbors = get_neighbors(current)
-  frontier.extend(neighbors)
-
-*/
-
 
 //This function is run once, after your last turn.
 void AI::end(){}

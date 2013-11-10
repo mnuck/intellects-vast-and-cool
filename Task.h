@@ -17,7 +17,6 @@ class Task{
         ~Task() {}
 
         virtual void action() = 0;
-        bool enemyWithinReach(const Unit& unit) {return true;}
 
     protected:
         unsigned numUnits;

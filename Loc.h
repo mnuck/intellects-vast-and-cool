@@ -33,4 +33,7 @@ private:
 };
 
 
+int manhattanDistance(Loc start, Loc end);
+
+
 #endif // LOC_H

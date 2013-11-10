@@ -2,13 +2,15 @@
 #define MURDER_H
 
 #include "Task.h"
+#include "Unit.h"
 
-class Murder : public Task
+class Murder //: public Task
 {
     public:
-        Murder() {}
+        Murder(AI* a_ai): ai(a_ai) {}
         ~Murder() {}
 
-        virtual void action();
+        virtual void action(Unit target);
+        AI* ai;
 };
 #endif
