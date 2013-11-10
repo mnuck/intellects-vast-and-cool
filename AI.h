@@ -22,7 +22,6 @@ public:
   virtual void end();
 
   std::vector<Loc> bfs(Loc start, Loc end, bool blockingWater, int moveSpeed);
-  std::unordered_map<int, Unit> unitMap;
 };
 
 #endif
