@@ -1,11 +1,31 @@
 #include <vector>
 #include <iostream>
+#include <unordered_map>
+#include <set>
+#include <deque>
 
 #include "AI.h"
 #include "util.h"
 
 using std::cout;
 using std::endl;
+using std::vector;
+
+int manhattanDistance(Loc start, Loc end)
+{
+  return abs(start.x() - end.x()) + abs(start.y() - end.y());
+}
+
+namespace std {
+  template <> struct hash<Loc>
+  {
+    size_t operator()(const Loc & rhs) const
+    {
+      return rhs.y() * 40 + rhs.x();
+    }
+  };
+}
+
 
 //Enum for spawning units
 enum
@@ -128,6 +148,132 @@ bool AI::run()
   }
   return true;
 }
+
+
+
+vector<Loc> AI::bfs(Loc start, Loc end, bool blockingWater, int moveSpeed)
+{
+    vector<Loc> result;
+    std::unordered_map<Loc, Loc> blockingGrid;
+    Loc current;
+    Loc next;
+    Loc blocking(-2, -2);
+    Loc available(-1, -1);
+
+    std::deque<Loc> frontier;
+
+    for (int x = 0 ; x < mapWidth() ; ++x)
+    {
+      for (int y = 0 ; y < mapHeight() ; ++y)
+      {
+        blockingGrid[Loc(x, y)] = available; // not blocking
+      }
+    }
+
+    // units only count as blocking for the first moveSpeed tiles
+    for (Unit u: units)
+    {
+      if (manhattanDistance(start, Loc(u.x(), u.y())) <= moveSpeed)
+      {
+        blockingGrid[Loc(u.x(), u.y())] = blocking; // blocking
+      }
+    }
+
+    for (Tile t: tiles)
+    {
+      if (blockingWater && t.waterAmount() > 0)
+      {
+        blockingGrid[Loc(t.x(), t.y())] = blocking; // blocking
+      }
+      if (t.owner() == 3) // ice
+      {
+        blockingGrid[Loc(t.x(), t.y())] = blocking; // blocking
+      }
+      if (t.owner() != playerID() && t.pumpID() == -1)
+      {
+        blockingGrid[Loc(t.x(), t.y())] = blocking; // blocking
+      }
+    }
+
+    frontier.push_back(Loc(start.x(), start.y()));
+
+    while (!frontier.empty())
+    {
+      current = frontier.front();
+      frontier.pop_front();
+
+      if (current == end)
+      {
+        while (current != start)
+        {
+          result.push_back(current);
+          current = blockingGrid[current];
+        }
+        break;
+      }
+
+      // north
+      if (current.y() > 0)
+      {
+        next = Loc(current.x(), current.y() - 1);
+        if (blockingGrid[next] == available)
+        {
+          blockingGrid[next] = current;
+          frontier.push_back(next);
+        }
+      }
+
+      // south
+      if (current.y() < mapHeight() - 1)
+      {
+        next = Loc(current.x(), current.y() + 1);
+        if (blockingGrid[next] == available)
+        {
+          blockingGrid[next] = current;
+          frontier.push_back(next);
+        }
+      }
+
+      // east
+      if (current.x() > 0)
+      {
+        next = Loc(current.x() - 1, current.y());
+        if (blockingGrid[next] == available)
+        {
+          blockingGrid[next] = current;
+          frontier.push_back(next);
+        }
+      }
+
+      // west
+      if (current.x() < mapWidth() - 1)
+      {
+        next = Loc(current.x() + 1, current.y());
+        if (blockingGrid[next] == available)
+        {
+          blockingGrid[next] = current;
+          frontier.push_back(next);
+        }
+      }
+    }
+
+    return result;
+}
+
+
+/*
+
+start = get_start()
+frontier = [start]
+while frontier
+  current = frontier.pop
+  if is_goal_state(current)
+    break
+  neighbors = get_neighbors(current)
+  frontier.extend(neighbors)
+
+*/
+
 
 //This function is run once, after your last turn.
 void AI::end(){}

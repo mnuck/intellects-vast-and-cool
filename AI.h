@@ -2,11 +2,13 @@
 #define AI_H
 
 #include <unordered_map>
+#include <vector>
 #include "BaseAI.h"
 #include "Murder.h"
 #include "Trench.h"
 #include "Defend.h"
 #include "Seige.h"
+#include "Loc.h"
 
 ///The class implementing gameplay logic.
 class AI: public BaseAI
@@ -19,6 +21,7 @@ public:
   virtual bool run();
   virtual void end();
 
+  std::vector<Loc> bfs(Loc start, Loc end, bool blockingWater, int moveSpeed);
   std::unordered_map<int, Unit> unitMap;
 };
 
