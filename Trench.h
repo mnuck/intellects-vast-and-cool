@@ -3,12 +3,13 @@
 
 #include "Task.h"
 
-class Trench : public Task
+class Trench //: public Task
 {
     public:
-        Trench() {}
+        Trench(AI* a_ai): ai(a_ai) {}
         ~Trench() {}
 
-        virtual void action();
+        virtual void action(Loc ice, Loc pump);
+        AI* ai;
 };
 #endif
