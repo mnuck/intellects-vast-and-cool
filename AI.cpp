@@ -144,7 +144,7 @@ vector<Loc> AI::bfs(Loc start, Loc end, Water water, int moveSpeed) const
 
   for (Tile t: tiles)
   {
-    if (water == Water::BLOCKS && t.waterAmount() > 0)
+    if (water == Water::BLOCKS && t.waterAmount() > 0) // water
     {
       blockingGrid[Loc(t)] = blocking;
     }
@@ -187,15 +187,10 @@ vector<Loc> AI::bfs(Loc start, Loc end, Water water, int moveSpeed) const
       }
     };
 
-    Loc north = current + Loc( 0, -1);
-    Loc south = current + Loc( 0,  1);
-    Loc west  = current + Loc( 1,  0);
-    Loc east  = current + Loc(-1,  0);
-
-    checkLoc(north);
-    checkLoc(south);
-    checkLoc(east);
-    checkLoc(west);
+    checkLoc(current + Loc( 0, -1));  // north
+    checkLoc(current + Loc( 0,  1));  // south
+    checkLoc(current + Loc(-1,  0));  // east
+    checkLoc(current + Loc( 1,  0));  // west
   }
   return result;
 }
