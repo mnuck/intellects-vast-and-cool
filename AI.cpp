@@ -111,7 +111,7 @@ bool AI::run()
   return true;
 }
 
-vector<Loc> AI::bfs(Loc start, Loc end, bool blockingWater, int moveSpeed)
+vector<Loc> AI::bfs(Loc start, Loc end, Water water, int moveSpeed)
 {
   vector<Loc> result;
   std::unordered_map<Loc, Loc> blockingGrid;
@@ -144,7 +144,7 @@ vector<Loc> AI::bfs(Loc start, Loc end, bool blockingWater, int moveSpeed)
 
   for (Tile t: tiles)
   {
-    if (blockingWater && t.waterAmount() > 0)
+    if (water == Water::BLOCKS && t.waterAmount() > 0)
     {
       blockingGrid[Loc(t)] = blocking;
     }

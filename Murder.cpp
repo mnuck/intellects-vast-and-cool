@@ -23,7 +23,7 @@ void Murder::action(Unit target)
             continue;
         }
 
-        path = ai->bfs(Loc(u), Loc(target), true, u.maxMovement());
+        path = ai->bfs(Loc(u), Loc(_target), Water::BLOCKS, u.maxMovement());
 
         if (path.size() < shortestPathLength)
         {
@@ -45,8 +45,8 @@ void Murder::action(Unit target)
     }
 
     bestUnit->touched = true;
-    path = ai->bfs(Loc(*bestUnit), Loc(target), 
-                   true, bestUnit->maxMovement());
+    path = ai->bfs(Loc(*bestUnit), Loc(_target), 
+                   Water::BLOCKS, bestUnit->maxMovement());
 
 
     int distance = manhattanDistance(Loc(*bestUnit), Loc(target));

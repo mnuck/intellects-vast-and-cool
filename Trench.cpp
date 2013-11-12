@@ -8,7 +8,7 @@ void Trench::action(Loc ice, Loc pump)
   Unit* bestUnit = NULL;
   int bestUnitId = -1;
 
-  path = ai->bfs(ice, pump, false, 0);
+  path = ai->bfs(_ice, _pump, Water::PATHABLE, 0);
 
   for (Loc i : path)
   {
@@ -40,7 +40,7 @@ void Trench::action(Loc ice, Loc pump)
 
       path = ai->bfs(Loc(u.x(), u.y()),
                      Loc(target.x(), target.y()),
-                     true, u.maxMovement());
+                     Water::BLOCKS, u.maxMovement());
 
       if (path.size() < shortestPathLength)
       {
@@ -64,7 +64,7 @@ void Trench::action(Loc ice, Loc pump)
   bestUnit->touched = true;
   path = ai->bfs(Loc(bestUnit->x(), bestUnit->y()),
                  Loc(target.x(), target.y()),
-                 true, bestUnit->maxMovement());
+                 Water::BLOCKS, bestUnit->maxMovement());
 
 
   for (int i = 0 ; i < bestUnit->maxMovement() && i < path.size() ; ++i)
