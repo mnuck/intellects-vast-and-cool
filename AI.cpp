@@ -133,7 +133,7 @@ vector<Loc> AI::bfs(Loc start, Loc end, bool blockingWater, int moveSpeed)
   // units only count as blocking for the first moveSpeed tiles
   for (Unit u: units)
   {
-    if (manhattanDistance(start, Loc(u.x(), u.y())) <= moveSpeed)
+    if (manhattanDistance(start, Loc(u)) <= moveSpeed)
     {
       if (Loc(u) != end)
       {
@@ -156,12 +156,12 @@ vector<Loc> AI::bfs(Loc start, Loc end, bool blockingWater, int moveSpeed)
     {
       if (Loc(t) != end)
       {
-        blockingGrid[Loc(t.x(), t.y())] = blocking;
+        blockingGrid[Loc(t)] = blocking;
       }
     }
   }
 
-  frontier.push_back(Loc(start.x(), start.y()));
+  frontier.push_back(start);
 
   while (!frontier.empty())
   {
