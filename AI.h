@@ -24,7 +24,7 @@ public:
   virtual bool run();
   virtual void end();
 
-  std::vector<Loc> bfs(Loc start, Loc end, Water water, int moveSpeed);
+  std::vector<Loc> bfs(Loc start, Loc end, Water water, int moveSpeed) const;
   std::vector<Loc> findMySadPump();
   std::vector<Loc> findIceCaps();
   std::vector<Loc> findMyPumps();

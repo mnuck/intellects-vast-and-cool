@@ -5,43 +5,43 @@
 #include "BaseAI.h"
 #include "game.h"
 
-int BaseAI::mapWidth()
+int BaseAI::mapWidth() const
 {
   return getMapWidth(c);
 }
-int BaseAI::mapHeight()
+int BaseAI::mapHeight() const
 {
   return getMapHeight(c);
 }
-int BaseAI::waterDamage()
+int BaseAI::waterDamage() const
 {
   return getWaterDamage(c);
 }
-int BaseAI::turnNumber()
+int BaseAI::turnNumber() const
 {
   return getTurnNumber(c);
 }
-int BaseAI::maxUnits()
+int BaseAI::maxUnits() const
 {
   return getMaxUnits(c);
 }
-int BaseAI::playerID()
+int BaseAI::playerID() const
 {
   return getPlayerID(c);
 }
-int BaseAI::gameNumber()
+int BaseAI::gameNumber() const
 {
   return getGameNumber(c);
 }
-int BaseAI::maxSiege()
+int BaseAI::maxSiege() const
 {
   return getMaxSiege(c);
 }
-float BaseAI::oxygenRate()
+float BaseAI::oxygenRate() const
 {
   return getOxygenRate(c);
 }
-int BaseAI::depositionRate()
+int BaseAI::depositionRate() const
 {
   return getDepositionRate(c);
 }

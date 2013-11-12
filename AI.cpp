@@ -111,7 +111,7 @@ bool AI::run()
   return true;
 }
 
-vector<Loc> AI::bfs(Loc start, Loc end, Water water, int moveSpeed)
+vector<Loc> AI::bfs(Loc start, Loc end, Water water, int moveSpeed) const
 {
   vector<Loc> result;
   std::unordered_map<Loc, Loc> blockingGrid;

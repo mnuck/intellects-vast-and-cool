@@ -37,25 +37,25 @@ protected:
   std::vector<UnitType> unitTypes;
 public:
   ///The width of the total map.
-  int mapWidth();
+  int mapWidth() const;
   ///The height of the total map.
-  int mapHeight();
+  int mapHeight() const;
   ///The amount of damage walking over water.
-  int waterDamage();
+  int waterDamage() const;
   ///The current turn number.
-  int turnNumber();
+  int turnNumber() const;
   ///The maximum number of units allowed per player.
-  int maxUnits();
+  int maxUnits() const;
   ///The id of the current player.
-  int playerID();
+  int playerID() const;
   ///What number game this is for the server
-  int gameNumber();
+  int gameNumber() const;
   ///The maximum siege value before the PumpStation is sieged.
-  int maxSiege();
+  int maxSiege() const;
   ///The rate at which missing oxygen is regained.
-  float oxygenRate();
+  float oxygenRate() const;
   ///The number of turns until sediment is deposited on the trenches.
-  int depositionRate();
+  int depositionRate() const;
 
   BaseAI(Connection* c);
   virtual ~BaseAI();
