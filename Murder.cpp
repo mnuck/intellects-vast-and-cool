@@ -24,7 +24,7 @@ void Murder::action()
             continue;
         }
 
-        path = _ai.bfs(Loc(u), Loc(_target), Water::BLOCKS, u.maxMovement());
+        path = _ai.bfs(u, _target, Water::BLOCKS, u.maxMovement());
 
         if (path.size() < shortestPathLength)
         {
@@ -46,11 +46,11 @@ void Murder::action()
     }
 
     bestUnit->touched = true;
-    path = _ai.bfs(Loc(*bestUnit), Loc(_target), 
+    path = _ai.bfs(*bestUnit, _target, 
                    Water::BLOCKS, bestUnit->maxMovement());
 
-
-    int distance = manhattanDistance(Loc(*bestUnit), Loc(_target));
+    // FIXME: need retreat logic for archers kiting tanks
+    int distance = manhattanDistance(*bestUnit, _target);
     if (distance <= bestUnit->range())
     {
         bestUnit->attack(_target);
@@ -59,7 +59,7 @@ void Murder::action()
 
     for (int i = 0 ; i < bestUnit->maxMovement() && i < path.size() ; ++i)
     {
-        int distance = manhattanDistance(Loc(*bestUnit), Loc(_target));
+        int distance = manhattanDistance(*bestUnit, _target);
         if (distance <= bestUnit->range())
         {
             bestUnit->attack(_target);

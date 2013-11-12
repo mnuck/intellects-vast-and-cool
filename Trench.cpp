@@ -15,7 +15,7 @@ void Trench::action()
   {
     for (Tile t : _ai.tiles)
     {
-      if (i.x() == t.x() && i.y() == t.y())
+      if (i == Loc(t))
       {
         if (t.depth() == 0)
         {
@@ -39,9 +39,7 @@ void Trench::action()
           continue;
       }
 
-      path = _ai.bfs(Loc(u.x(), u.y()),
-                     Loc(target.x(), target.y()),
-                     Water::BLOCKS, u.maxMovement());
+      path = _ai.bfs(u, target, Water::BLOCKS, u.maxMovement());
 
       if (path.size() < shortestPathLength)
       {
@@ -63,8 +61,7 @@ void Trench::action()
   }
 
   bestUnit->touched = true;
-  path = _ai.bfs(Loc(bestUnit->x(), bestUnit->y()),
-                 Loc(target.x(), target.y()),
+  path = _ai.bfs(*bestUnit, target,
                  Water::BLOCKS, bestUnit->maxMovement());
 
 
@@ -72,11 +69,11 @@ void Trench::action()
   {
     bestUnit->move(path[i].x(), path[i].y());
   }
-  if (bestUnit->x() == target.x() && bestUnit->y() == target.y())
+  if (Loc(*bestUnit) == target)
   {
     for (Tile t : _ai.tiles)
     {
-      if (target.x() == t.x() && target.y() == t.y())
+      if (target == Loc(t))
       {
         bestUnit->dig(t);
         return;

@@ -133,7 +133,7 @@ vector<Loc> AI::bfs(Loc start, Loc end, Water water, int moveSpeed) const
   // units only count as blocking for the first moveSpeed tiles
   for (Unit u: units)
   {
-    if (manhattanDistance(start, Loc(u)) <= moveSpeed)
+    if (manhattanDistance(start, u) <= moveSpeed)
     {
       if (Loc(u) != end)
       {
@@ -187,10 +187,10 @@ vector<Loc> AI::bfs(Loc start, Loc end, Water water, int moveSpeed) const
       }
     };
 
-    Loc north = Loc(current) + Loc( 0, -1);
-    Loc south = Loc(current) + Loc( 0,  1);
-    Loc west  = Loc(current) + Loc( 1,  0);
-    Loc east  = Loc(current) + Loc(-1,  0);
+    Loc north = current + Loc( 0, -1);
+    Loc south = current + Loc( 0,  1);
+    Loc west  = current + Loc( 1,  0);
+    Loc east  = current + Loc(-1,  0);
 
     checkLoc(north);
     checkLoc(south);
@@ -207,7 +207,7 @@ vector<Loc> AI::findIceCaps()
   {
     if (t.owner() == 3)
     {
-      result.push_back(Loc(t));
+      result.push_back(t);
     }
   }
   return result;
@@ -220,7 +220,7 @@ vector<Loc> AI::findMyPumps()
   {
     if (t.owner() == playerID() && t.pumpID() != -1)
     {
-      result.push_back(Loc(t));
+      result.push_back(t);
     }
   }
   return result;
