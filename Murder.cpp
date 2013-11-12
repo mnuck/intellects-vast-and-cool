@@ -23,9 +23,7 @@ void Murder::action(Unit target)
             continue;
         }
 
-        path = ai->bfs(Loc(u.x(), u.y()),
-                       Loc(target.x(), target.y()),
-                       true, u.maxMovement());
+        path = ai->bfs(Loc(u), Loc(target), true, u.maxMovement());
 
         if (path.size() < shortestPathLength)
         {
@@ -47,13 +45,11 @@ void Murder::action(Unit target)
     }
 
     bestUnit->touched = true;
-    path = ai->bfs(Loc(bestUnit->x(), bestUnit->y()),
-                   Loc(target.x(), target.y()),
+    path = ai->bfs(Loc(*bestUnit), Loc(target), 
                    true, bestUnit->maxMovement());
 
 
-    int distance = manhattanDistance(Loc(bestUnit->x(), bestUnit->y()),
-                                     Loc(target.x(), target.y()));
+    int distance = manhattanDistance(Loc(*bestUnit), Loc(target));
     if (distance <= bestUnit->range())
     {
         bestUnit->attack(target);
@@ -62,8 +58,7 @@ void Murder::action(Unit target)
 
     for (int i = 0 ; i < bestUnit->maxMovement() && i < path.size() ; ++i)
     {
-        int distance = manhattanDistance(Loc(bestUnit->x(), bestUnit->y()),
-                                         Loc(target.x(), target.y()));
+        int distance = manhattanDistance(Loc(*bestUnit), Loc(target));
         if (distance <= bestUnit->range())
         {
             bestUnit->attack(target);
@@ -72,5 +67,3 @@ void Murder::action(Unit target)
         bestUnit->move(path[i].x(), path[i].y());
     }
 }
-
-
