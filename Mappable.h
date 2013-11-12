@@ -17,9 +17,9 @@ class Mappable {
   ///Unique Identifier
   int id();
   ///X position of the object
-  int x();
+  int x() const;
   ///Y position of the object
-  int y();
+  int y() const;
 
   // Actions
 

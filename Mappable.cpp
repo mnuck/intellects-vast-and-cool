@@ -14,12 +14,12 @@ int Mappable::id()
   return ((_Mappable*)ptr)->id;
 }
 
-int Mappable::x()
+int Mappable::x() const
 {
   return ((_Mappable*)ptr)->x;
 }
 
-int Mappable::y()
+int Mappable::y() const
 {
   return ((_Mappable*)ptr)->y;
 }

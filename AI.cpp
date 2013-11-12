@@ -113,117 +113,91 @@ bool AI::run()
 
 vector<Loc> AI::bfs(Loc start, Loc end, bool blockingWater, int moveSpeed)
 {
-    vector<Loc> result;
-    std::unordered_map<Loc, Loc> blockingGrid;
-    Loc current;
-    Loc next;
-    Loc blocking(-2, -2);
-    Loc available(-1, -1);
+  vector<Loc> result;
+  std::unordered_map<Loc, Loc> blockingGrid;
+  Loc current;
+  Loc next;
+  Loc blocking(-2, -2);
+  Loc available(-1, -1);
 
-    std::deque<Loc> frontier;
+  std::deque<Loc> frontier;
 
-    for (int x = 0 ; x < mapWidth() ; ++x)
+  for (int x = 0 ; x < mapWidth() ; ++x)
+  {
+    for (int y = 0 ; y < mapHeight() ; ++y)
     {
-      for (int y = 0 ; y < mapHeight() ; ++y)
+      blockingGrid[Loc(x, y)] = available;
+    }
+  }
+
+  // units only count as blocking for the first moveSpeed tiles
+  for (Unit u: units)
+  {
+    if (manhattanDistance(start, Loc(u.x(), u.y())) <= moveSpeed)
+    {
+      if (Loc(u) != end)
       {
-        blockingGrid[Loc(x, y)] = available;
+        blockingGrid[Loc(u)] = blocking;
       }
     }
+  }
 
-    // units only count as blocking for the first moveSpeed tiles
-    for (Unit u: units)
+  for (Tile t: tiles)
+  {
+    if (blockingWater && t.waterAmount() > 0)
     {
-      if (manhattanDistance(start, Loc(u.x(), u.y())) <= moveSpeed)
-      {
-        if (Loc(u.x(), u.y()) != end)
-        {
-          blockingGrid[Loc(u.x(), u.y())] = blocking;
-        }
-      }
+      blockingGrid[Loc(t)] = blocking;
     }
-
-    for (Tile t: tiles)
+    if (t.owner() == 3) // ice
     {
-      if (blockingWater && t.waterAmount() > 0)
+      blockingGrid[Loc(t)] = blocking;
+    }
+    if (t.owner() == (1 - playerID()) && t.pumpID() == -1) // his spawn point
+    {
+      if (Loc(t) != end)
       {
         blockingGrid[Loc(t.x(), t.y())] = blocking;
       }
-      if (t.owner() == 3) // ice
-      {
-        blockingGrid[Loc(t.x(), t.y())] = blocking;
-      }
-      if (t.owner() == (1 - playerID()) && t.pumpID() == -1) // his spawn point
-      {
-        if (Loc(t.x(), t.y()) != end)
-        {
-          blockingGrid[Loc(t.x(), t.y())] = blocking;
-        }
-      }
     }
+  }
 
-    frontier.push_back(Loc(start.x(), start.y()));
+  frontier.push_back(Loc(start.x(), start.y()));
 
-    while (!frontier.empty())
+  while (!frontier.empty())
+  {
+    current = frontier.front();
+    frontier.pop_front();
+
+    if (current == end)
     {
-      current = frontier.front();
-      frontier.pop_front();
-
-      if (current == end)
+      while (current != start)
       {
-        while (current != start)
-        {
-          result.insert(result.begin(), current);
-          current = blockingGrid[current];
-        }
-        break;
+        result.insert(result.begin(), current);
+        current = blockingGrid[current];
       }
-
-      // north
-      if (current.y() > 0)
-      {
-        next = Loc(current.x(), current.y() - 1);
-        if (blockingGrid[next] == available)
-        {
-          blockingGrid[next] = current;
-          frontier.push_back(next);
-        }
-      }
-
-      // south
-      if (current.y() < mapHeight() - 1)
-      {
-        next = Loc(current.x(), current.y() + 1);
-        if (blockingGrid[next] == available)
-        {
-          blockingGrid[next] = current;
-          frontier.push_back(next);
-        }
-      }
-
-      // east
-      if (current.x() > 0)
-      {
-        next = Loc(current.x() - 1, current.y());
-        if (blockingGrid[next] == available)
-        {
-          blockingGrid[next] = current;
-          frontier.push_back(next);
-        }
-      }
-
-      // west
-      if (current.x() < mapWidth() - 1)
-      {
-        next = Loc(current.x() + 1, current.y());
-        if (blockingGrid[next] == available)
-        {
-          blockingGrid[next] = current;
-          frontier.push_back(next);
-        }
-      }
+      break;
     }
 
-    return result;
+    auto checkLoc = [&] (Loc next) -> void
+    {
+      if (blockingGrid[next] == available)
+      {
+        blockingGrid[next] = current;
+        frontier.push_back(next);
+      }
+    };
+
+    Loc north = Loc(current) + Loc( 0, -1);
+    Loc south = Loc(current) + Loc( 0,  1);
+    Loc west  = Loc(current) + Loc( 1,  0);
+    Loc east  = Loc(current) + Loc(-1,  0);
+
+    checkLoc(north);
+    checkLoc(south);
+    checkLoc(east);
+    checkLoc(west);
+  }
+  return result;
 }
 
 vector<Loc> AI::findMySadPump()
@@ -237,7 +211,7 @@ vector<Loc> AI::findMySadPump()
   {
     if (t.owner() == playerID() && t.pumpID() != -1)
     {
-      isMyPump.push_back(Loc(t.x(), t.y()));
+      isMyPump.push_back(Loc(t));
     }
   }
 
