@@ -1,6 +1,7 @@
 #include "Trench.h"
+#include "AI.h"
 
-void Trench::action(Loc ice, Loc pump)
+void Trench::action()
 {
   std::vector<Loc> path;
   Loc target;
@@ -8,11 +9,11 @@ void Trench::action(Loc ice, Loc pump)
   Unit* bestUnit = NULL;
   int bestUnitId = -1;
 
-  path = ai->bfs(_ice, _pump, Water::PATHABLE, 0);
+  path = _ai.bfs(_ice, _pump, Water::PATHABLE, 0);
 
   for (Loc i : path)
   {
-    for (Tile t : ai->tiles)
+    for (Tile t : _ai.tiles)
     {
       if (i.x() == t.x() && i.y() == t.y())
       {
@@ -27,18 +28,18 @@ void Trench::action(Loc ice, Loc pump)
   }
   diggin:
 
-  for (Unit u: ai->units)
+  for (Unit u: _ai.units)
   {
       if (u.touched)
       {
           continue;
       }
-      if (u.owner() != ai->playerID())
+      if (u.owner() != _ai.playerID())
       {
           continue;
       }
 
-      path = ai->bfs(Loc(u.x(), u.y()),
+      path = _ai.bfs(Loc(u.x(), u.y()),
                      Loc(target.x(), target.y()),
                      Water::BLOCKS, u.maxMovement());
 
@@ -52,17 +53,17 @@ void Trench::action(Loc ice, Loc pump)
   if (bestUnitId == -1)
       return;
 
-  for (int i=0 ; i < (ai->units).size() ; ++i)
+  for (int i=0 ; i < (_ai.units).size() ; ++i)
   {
-      if (ai->units[i].id() == bestUnitId)
+      if (_ai.units[i].id() == bestUnitId)
       {
-          bestUnit = &(ai->units[i]);
+          bestUnit = &(_ai.units[i]);
           break;
       }
   }
 
   bestUnit->touched = true;
-  path = ai->bfs(Loc(bestUnit->x(), bestUnit->y()),
+  path = _ai.bfs(Loc(bestUnit->x(), bestUnit->y()),
                  Loc(target.x(), target.y()),
                  Water::BLOCKS, bestUnit->maxMovement());
 
@@ -73,7 +74,7 @@ void Trench::action(Loc ice, Loc pump)
   }
   if (bestUnit->x() == target.x() && bestUnit->y() == target.y())
   {
-    for (Tile t : ai->tiles)
+    for (Tile t : _ai.tiles)
     {
       if (target.x() == t.x() && target.y() == t.y())
       {

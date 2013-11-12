@@ -4,13 +4,15 @@
 #include "Task.h"
 #include "Unit.h"
 
-class Murder //: public Task
+class Murder: public Task
 {
     public:
-        Murder(AI* a_ai): ai(a_ai) {}
+        Murder(AI& ai, Unit& target): Task(ai), _target(target) {}
         ~Murder() {}
 
-        virtual void action(Unit target);
-        AI* ai;
+        virtual void action();
+
+    private:
+    	Unit& _target;
 };
 #endif

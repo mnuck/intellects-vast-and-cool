@@ -6,7 +6,7 @@
 class Seige : public Task
 {
     public:
-        Seige() {}
+        Seige(AI& ai): Task(ai) {}
         ~Seige() {}
 
         virtual void action();

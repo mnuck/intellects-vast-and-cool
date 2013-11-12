@@ -90,8 +90,8 @@ bool AI::run()
   {
     if (u.owner() != playerID())
     {
-      Murder m(this);
-      m.action(u);
+      Murder m(*this, u);
+      m.action();
     }
   }
 

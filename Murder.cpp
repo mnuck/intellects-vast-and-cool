@@ -1,29 +1,30 @@
 #include <iostream>
+#include "Murder.h"
+#include "AI.h"
 
 using std::cout;
 using std::endl;
 
-#include "Murder.h"
 
-void Murder::action(Unit target)
+void Murder::action()
 {
     int shortestPathLength = 1000;
     std::vector<Loc> path;
     Unit* bestUnit = NULL;
     int bestUnitId = -1;
 
-    for (Unit u: ai->units)
+    for (Unit u: _ai.units)
     {
         if (u.touched)
         {
             continue;
         }
-        if (u.owner() != ai->playerID())
+        if (u.owner() != _ai.playerID())
         {
             continue;
         }
 
-        path = ai->bfs(Loc(u), Loc(_target), Water::BLOCKS, u.maxMovement());
+        path = _ai.bfs(Loc(u), Loc(_target), Water::BLOCKS, u.maxMovement());
 
         if (path.size() < shortestPathLength)
         {
@@ -35,33 +36,33 @@ void Murder::action(Unit target)
     if (bestUnitId == -1)
         return;
 
-    for (int i=0 ; i < (ai->units).size() ; ++i)
+    for (int i=0 ; i < (_ai.units).size() ; ++i)
     {
-        if (ai->units[i].id() == bestUnitId)
+        if (_ai.units[i].id() == bestUnitId)
         {
-            bestUnit = &(ai->units[i]);
+            bestUnit = &(_ai.units[i]);
             break;
         }
     }
 
     bestUnit->touched = true;
-    path = ai->bfs(Loc(*bestUnit), Loc(_target), 
+    path = _ai.bfs(Loc(*bestUnit), Loc(_target), 
                    Water::BLOCKS, bestUnit->maxMovement());
 
 
-    int distance = manhattanDistance(Loc(*bestUnit), Loc(target));
+    int distance = manhattanDistance(Loc(*bestUnit), Loc(_target));
     if (distance <= bestUnit->range())
     {
-        bestUnit->attack(target);
+        bestUnit->attack(_target);
         return;
     }
 
     for (int i = 0 ; i < bestUnit->maxMovement() && i < path.size() ; ++i)
     {
-        int distance = manhattanDistance(Loc(*bestUnit), Loc(target));
+        int distance = manhattanDistance(Loc(*bestUnit), Loc(_target));
         if (distance <= bestUnit->range())
         {
-            bestUnit->attack(target);
+            bestUnit->attack(_target);
             break;
         }
         bestUnit->move(path[i].x(), path[i].y());
