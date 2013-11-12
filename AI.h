@@ -20,6 +20,8 @@ public:
 
   std::vector<Loc> bfs(Loc start, Loc end, bool blockingWater, int moveSpeed);
   std::vector<Loc> findMySadPump();
+  std::vector<Loc> findIceCaps();
+  std::vector<Loc> findMyPumps();
   std::map<Loc, Tile*> tileMap;
 };
 

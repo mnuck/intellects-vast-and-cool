@@ -83,6 +83,8 @@ bool AI::run()
   Player him = players[abs(1 - playerID())];
 
   vector<Loc> sadPump = findMySadPump();
+  vector<Loc> iceCaps = findIceCaps();
+  vector<Loc> myPumps = findMyPumps();
 
   for (Unit u: units)
   {
@@ -108,8 +110,6 @@ bool AI::run()
   }
   return true;
 }
-
-
 
 vector<Loc> AI::bfs(Loc start, Loc end, bool blockingWater, int moveSpeed)
 {
@@ -200,6 +200,32 @@ vector<Loc> AI::bfs(Loc start, Loc end, bool blockingWater, int moveSpeed)
   return result;
 }
 
+vector<Loc> AI::findIceCaps()
+{
+  vector<Loc> result;
+  for (Tile t: tiles)
+  {
+    if (t.owner() == 3)
+    {
+      result.push_back(Loc(t));
+    }
+  }
+  return result;
+}
+
+vector<Loc> AI::findMyPumps()
+{
+  vector<Loc> result;
+  for (Tile t: tiles)
+  {
+    if (t.owner() == playerID() && t.pumpID() != -1)
+    {
+      result.push_back(Loc(t));
+    }
+  }
+  return result;
+}
+
 vector<Loc> AI::findMySadPump()
 {
   vector<Loc> result;
@@ -277,9 +303,6 @@ vector<Loc> AI::findMySadPump()
       }
     }
   }
-
-
-
   return result;
 }
 
