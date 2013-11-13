@@ -47,7 +47,7 @@ bool AI::run()
   tileMap.clear();
   for (int i=0 ; i<tiles.size() ; ++i)
   {
-    tileMap[Loc(tiles[i].x(), tiles[i].y())] = &(tiles[i]);
+    tileMap[tiles[i]] = &(tiles[i]);
   }
 
   for (Unit u: units)
