@@ -23,29 +23,11 @@ namespace std {
   };
 }
 
-
-static const std::vector<const char*> NAMES =
-{
-  "More Dakka",
-  "Lemmings with Lazers",
-  "BRB Fixing Arena (Again)",
-  "PEW PEW",
-  "Doctor Manhattan Distance",
-  "Not a Smart Man"
-};
-
-const char* get_name()
-{
-    int index = rand() % NAMES.size();
-    return NAMES[index];
-}
-
-
 AI::AI(Connection* conn) : BaseAI(conn) {}
 
 const char* AI::username()
 {
-  return get_name();
+  return "Red Rocket";
 }
 
 const char* AI::password()
