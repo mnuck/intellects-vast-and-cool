@@ -8,6 +8,7 @@
 #include "util.h"
 #include "Loc.h"
 #include "Murder.h"
+#include "Spawn.h"
 
 using std::cout;
 using std::endl;
@@ -69,7 +70,7 @@ bool AI::run()
 
   for (SpawnRequest req: spawnRequests)
   {
-    //Spawn(*this, req).activate();
+    Spawn(*this, req).activate();
   }
 
   for (Tile t: tiles)
