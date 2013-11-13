@@ -6,6 +6,7 @@
 
 #include "AI.h"
 #include "util.h"
+#include "Loc.h"
 #include "Murder.h"
 
 using std::cout;
@@ -42,6 +43,7 @@ void AI::init(){}
 //Return true to end your turn, return false to ask the server for updated information.
 bool AI::run()
 {
+  spawnRequests.clear();
   tileMap.clear();
   for (int i=0 ; i<tiles.size() ; ++i)
   {
@@ -63,6 +65,11 @@ bool AI::run()
     {
       Murder(*this, u).activate();
     }
+  }
+
+  for (SpawnRequest req: spawnRequests)
+  {
+    //Spawn(*this, req).activate();
   }
 
   for (Tile t: tiles)
@@ -192,7 +199,9 @@ vector<Loc> AI::findMyPumps()
 }
 
 
+void AI::requestSpawn(Dood dood, Loc spawnLoc)
     {
+  spawnRequests.push_back(SpawnRequest(dood, spawnLoc));
 }
 
 //This function is run once, after your last turn.

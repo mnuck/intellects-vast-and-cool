@@ -21,6 +21,13 @@ enum Dood
     TANK,
 };
 
+struct SpawnRequest
+{
+  SpawnRequest(Dood dood, Loc spawnLoc): _doodType(dood), _spawnLocation(spawnLoc) {}
+  Dood _doodType;
+  Loc  _spawnLocation;
+};
+
 ///The class implementing gameplay logic.
 class AI: public BaseAI
 {
@@ -36,7 +43,10 @@ public:
   std::vector<Loc> findMySadPump();
   std::vector<Loc> findIceCaps();
   std::vector<Loc> findMyPumps();
+  void requestSpawn(Dood dood, Loc spawnloc);
+
   std::map<Loc, Tile*> tileMap;
+  std::vector<SpawnRequest> spawnRequests;
 };
 
 #endif
