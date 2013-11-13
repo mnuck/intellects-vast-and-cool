@@ -13,6 +13,12 @@ void Murder::activate()
     Unit* bestUnit = NULL;
     int bestUnitId = -1;
 
+    Water waterBlocking = Water::PATHABLE;
+    if (_doodType == Dood::WORKER)
+    {
+        waterBlocking = Water::BLOCKS;
+    }
+
     for (Unit u: _ai.units)
     {
         if (u.touched)
@@ -23,8 +29,12 @@ void Murder::activate()
         {
             continue;
         }
+        if (u.type() != _doodType)
+        {
+            continue;
+        }
 
-        path = _ai.bfs(u, _target, Water::BLOCKS, u.maxMovement());
+        path = _ai.bfs(u, _target, waterBlocking, u.maxMovement());
 
         if (path.size() < shortestPathLength)
         {
@@ -34,7 +44,10 @@ void Murder::activate()
     }
 
     if (bestUnitId == -1)
+    {
+        _ai.requestSpawn(_doodType, Loc(_target));
         return;
+    }
 
     for (int i=0 ; i < (_ai.units).size() ; ++i)
     {
@@ -47,7 +60,7 @@ void Murder::activate()
 
     bestUnit->touched = true;
     path = _ai.bfs(*bestUnit, _target, 
-                   Water::BLOCKS, bestUnit->maxMovement());
+                   waterBlocking, bestUnit->maxMovement());
 
     // FIXME: need retreat logic for archers kiting tanks
     int distance = manhattanDistance(*bestUnit, _target);

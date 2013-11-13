@@ -63,7 +63,7 @@ bool AI::run()
   {
     if (u.owner() != playerID())
     {
-      Murder(*this, u).activate();
+      Murder(*this, u, Dood::WORKER).activate();
     }
   }
 
