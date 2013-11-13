@@ -200,7 +200,7 @@ vector<Loc> AI::findMyPumps()
 
 
 void AI::requestSpawn(Dood dood, Loc spawnLoc)
-    {
+{
   spawnRequests.push_back(SpawnRequest(dood, spawnLoc));
 }
 
