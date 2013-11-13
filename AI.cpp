@@ -24,14 +24,6 @@ namespace std {
 }
 
 
-//Enum for spawning units
-enum
-{
-    WORKER,
-    SCOUT,
-    TANK,
-};
-
 static const std::vector<const char*> NAMES =
 {
   "More Dakka",

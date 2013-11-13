@@ -13,6 +13,14 @@ enum class Water
   PATHABLE
 };
 
+//Enum for spawning units
+enum Dood
+{
+    WORKER,
+    SCOUT,
+    TANK,
+};
+
 ///The class implementing gameplay logic.
 class AI: public BaseAI
 {
