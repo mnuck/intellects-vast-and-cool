@@ -54,9 +54,6 @@ bool AI::run()
   }
 
   Player me = players[playerID()];
-  Player him = players[abs(1 - playerID())];
-
-  vector<Loc> sadPump = findMySadPump();
   vector<Loc> iceCaps = findIceCaps();
   vector<Loc> myPumps = findMyPumps();
 
@@ -194,84 +191,8 @@ vector<Loc> AI::findMyPumps()
   return result;
 }
 
-vector<Loc> AI::findMySadPump()
-{
-  vector<Loc> result;
-  Loc next;
 
-
-  vector<Loc> isMyPump;
-  for (Tile t: tiles)
-  {
-    if (t.owner() == playerID() && t.pumpID() != -1)
     {
-      isMyPump.push_back(Loc(t));
-    }
-  }
-
-
-  vector<Loc> adjacent;
-  vector<Loc> notAdjacent;
-
-  for (Loc current: isMyPump)
-  {
-    // north
-    if (current.y() > 0)
-    {
-      next = Loc(current.x(), current.y() - 1);
-      if (tileMap[next]->depth() > 1000)
-      {
-        adjacent.push_back(current);
-      }
-      else
-      {
-        notAdjacent.push_back(current);
-      }
-    }
-
-    // south
-    if (current.y() < mapHeight() - 1)
-    {
-      next = Loc(current.x(), current.y() + 1);
-      if (tileMap[next]->depth() > 1000)
-      {
-        adjacent.push_back(current);
-      }
-      else
-      {
-        notAdjacent.push_back(current);
-      }
-    }
-
-    // east
-    if (current.x() > 0)
-    {
-      next = Loc(current.x() - 1, current.y());
-      if (tileMap[next]->depth() > 1000)
-      {
-        adjacent.push_back(current);
-      }
-      else
-      {
-        notAdjacent.push_back(current);
-      }
-    }
-
-    // west
-    if (current.x() < mapWidth() - 1)
-    {
-      next = Loc(current.x() + 1, current.y());
-      if (tileMap[next]->depth() > 1000)
-      {
-        adjacent.push_back(current);
-      }
-      else
-      {
-        notAdjacent.push_back(current);
-      }
-    }
-  }
-  return result;
 }
 
 //This function is run once, after your last turn.
