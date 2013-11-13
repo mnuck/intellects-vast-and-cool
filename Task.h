@@ -8,7 +8,7 @@ class Task{
         Task(AI& ai): _ai(ai) {}
         ~Task() {}
 
-        virtual void action() = 0;
+        virtual void activate() = 0;
 
     protected:
         AI& _ai;

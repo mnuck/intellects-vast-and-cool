@@ -10,7 +10,7 @@ class Trench: public Task
         	Task(ai), _ice(ice), _pump(pump) {}
         ~Trench() {}
 
-        virtual void action();
+        virtual void activate();
     private:
     	Loc _ice;
     	Loc _pump;

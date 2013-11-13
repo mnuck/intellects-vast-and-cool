@@ -1,4 +1,4 @@
 #include "Seige.h"
 
-void Seige::action() {
+void Seige::activate() {
 }

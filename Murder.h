@@ -10,7 +10,7 @@ class Murder: public Task
         Murder(AI& ai, Unit& target): Task(ai), _target(target) {}
         ~Murder() {}
 
-        virtual void action();
+        virtual void activate();
 
     private:
     	Unit& _target;

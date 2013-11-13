@@ -9,7 +9,7 @@ class Seige : public Task
         Seige(AI& ai): Task(ai) {}
         ~Seige() {}
 
-        virtual void action();
+        virtual void activate();
 };
 
 #endif

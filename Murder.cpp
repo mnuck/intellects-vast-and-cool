@@ -6,7 +6,7 @@ using std::cout;
 using std::endl;
 
 
-void Murder::action()
+void Murder::activate()
 {
     int shortestPathLength = 1000;
     std::vector<Loc> path;

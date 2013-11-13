@@ -1,7 +1,7 @@
 #include "Trench.h"
 #include "AI.h"
 
-void Trench::action()
+void Trench::activate()
 {
   std::vector<Loc> path;
   Loc target;
