@@ -6,10 +6,14 @@
 class Siege : public Task
 {
     public:
-        Siege(AI& ai): Task(ai) {}
+        Siege(AI& ai, const Loc& target):
+        	Task(ai), _target(target) {}
         ~Siege() {}
 
         virtual void activate();
+
+    private:
+    	Loc _target;
 };
 
 #endif

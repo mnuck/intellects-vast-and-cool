@@ -3,7 +3,7 @@
 
 #include "Task.h"
 
-class Siege : public Task
+class Moat : public Task
 {
     public:
         Moat(AI& ai): Task(ai) {}

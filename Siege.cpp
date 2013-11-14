@@ -7,9 +7,11 @@ void Siege::activate()
     Unit* bestUnit = NULL;
     int bestUnitId = -1;
 
-    for (int i=2 ; --i)
+    Dood _doodType = Dood::WORKER;
+	Water waterBlocking = Water::PATHABLE;
+
+    for (int i = 0 ; i < 2 ; --i)
     {
-    	Water waterBlocking = Water::PATHABLE;
 	    if (_doodType == Dood::WORKER)
 	    {
 	        waterBlocking = Water::BLOCKS;
@@ -41,7 +43,7 @@ void Siege::activate()
 	    }
 	    if (bestUnitId != -1)
 	    {
-	    	continue
+	    	continue;
 	    }
     }
  
