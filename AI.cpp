@@ -14,22 +14,6 @@ using std::cout;
 using std::endl;
 using std::vector;
 
-
-AI::AI(Connection* conn) : BaseAI(conn) {}
-
-const char* AI::username()
-{
-  return "Red Rocket";
-}
-
-const char* AI::password()
-{
-  return "password";
-}
-
-//This function is run once, before your first turn.
-void AI::init(){}
-
 //This function is called each time it is your turn.
 //Return true to end your turn, return false to ask the server for updated information.
 bool AI::run()
@@ -77,6 +61,37 @@ bool AI::run()
     }
   }
   return true;
+}
+
+vector<Loc> AI::findIceCaps()
+{
+  vector<Loc> result;
+  for (Tile t: tiles)
+  {
+    if (t.owner() == 3)
+    {
+      result.push_back(t);
+    }
+  }
+  return result;
+}
+
+vector<Loc> AI::findMyPumps()
+{
+  vector<Loc> result;
+  for (Tile t: tiles)
+  {
+    if (t.owner() == playerID() && t.pumpID() != -1)
+    {
+      result.push_back(t);
+    }
+  }
+  return result;
+}
+
+void AI::requestSpawn(Dood dood, Loc spawnLoc)
+{
+  spawnRequests.push_back(SpawnRequest(dood, spawnLoc));
 }
 
 vector<Loc> AI::bfs(Loc start, Loc end, Water water, int moveSpeed) const
@@ -163,36 +178,21 @@ vector<Loc> AI::bfs(Loc start, Loc end, Water water, int moveSpeed) const
   return result;
 }
 
-vector<Loc> AI::findIceCaps()
+AI::AI(Connection* conn) : BaseAI(conn) {}
+
+const char* AI::username()
 {
-  vector<Loc> result;
-  for (Tile t: tiles)
-  {
-    if (t.owner() == 3)
-    {
-      result.push_back(t);
-    }
-  }
-  return result;
+  return "Red Rocket";
 }
 
-vector<Loc> AI::findMyPumps()
+const char* AI::password()
 {
-  vector<Loc> result;
-  for (Tile t: tiles)
-  {
-    if (t.owner() == playerID() && t.pumpID() != -1)
-    {
-      result.push_back(t);
-    }
-  }
-  return result;
+  return "password";
 }
 
-
-void AI::requestSpawn(Dood dood, Loc spawnLoc)
+//This function is run once, before your first turn.
+void AI::init()
 {
-  spawnRequests.push_back(SpawnRequest(dood, spawnLoc));
 }
 
 //This function is run once, after your last turn.
