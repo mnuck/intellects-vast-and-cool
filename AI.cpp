@@ -193,6 +193,7 @@ const char* AI::password()
 //This function is run once, before your first turn.
 void AI::init()
 {
+    srand(time(NULL));
 }
 
 //This function is run once, after your last turn.
