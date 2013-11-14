@@ -15,16 +15,6 @@ using std::endl;
 using std::vector;
 
 
-namespace std {
-  template <> struct hash<Loc>
-  {
-    size_t operator()(const Loc & rhs) const
-    {
-      return rhs.y() * 40 + rhs.x();
-    }
-  };
-}
-
 AI::AI(Connection* conn) : BaseAI(conn) {}
 
 const char* AI::username()

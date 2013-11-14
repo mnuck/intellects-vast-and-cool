@@ -46,5 +46,14 @@ private:
 
 int manhattanDistance(Loc start, Loc end);
 
+namespace std {
+  template <> struct hash<Loc>
+  {
+    size_t operator()(const Loc & rhs) const
+    {
+      return rhs.y() * 40 + rhs.x();
+    }
+  };
+}
 
 #endif // LOC_H
