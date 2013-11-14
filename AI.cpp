@@ -47,19 +47,6 @@ bool AI::run()
     Spawn(*this, req).activate();
   }
 
-  for (Tile t: tiles)
-  {
-    if (t.owner() == playerID())
-    {
-      if (!t.isSpawning())
-      {
-        if (me.oxygen() >= unitTypes[WORKER].cost())
-        {
-          t.spawn(WORKER);
-        }
-      }
-    }
-  }
   return true;
 }
 

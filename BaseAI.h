@@ -25,6 +25,7 @@ class BaseAI
 
 friend class Murder;
 friend class Seige;
+friend class Spawn;
 friend class Trench;
 
 protected:
