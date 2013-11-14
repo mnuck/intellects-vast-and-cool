@@ -1,13 +1,13 @@
 #include <vector>
 #include <iostream>
 #include <unordered_map>
-#include <set>
 #include <deque>
 
 #include "AI.h"
-#include "util.h"
 #include "Loc.h"
 #include "Murder.h"
+#include "Siege.h"
+#include "Trench.h"
 #include "Spawn.h"
 
 using std::cout;
