@@ -51,14 +51,7 @@ void Trench::activate()
   if (bestUnitId == -1)
       return;
 
-  for (int i=0 ; i < (_ai.units).size() ; ++i)
-  {
-      if (_ai.units[i].id() == bestUnitId)
-      {
-          bestUnit = &(_ai.units[i]);
-          break;
-      }
-  }
+  bestUnit = _ai.unitIdIndex[bestUnitId];
 
   bestUnit->touched = true;
   path = _ai.bfs(*bestUnit, target,

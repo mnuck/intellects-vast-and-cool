@@ -49,6 +49,7 @@ public:
   std::vector<Loc> findMySadPump();
   std::vector<Loc> findIceCaps();
   std::vector<Loc> findMyPumps();
+  std::unordered_map<int, Unit*> unitIdIndex;
   void requestSpawn(Dood dood, Loc spawnloc);
 
   std::map<Loc, Tile*> tileMap;

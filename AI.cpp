@@ -25,6 +25,12 @@ bool AI::run()
     tileMap[tiles[i]] = &(tiles[i]);
   }
 
+  unitIdIndex.clear();
+  for (int i = 0 ; i < units.size() ; ++i)
+  {
+    unitIdIndex[units[i].id()] = &(units[i]);
+  }
+
   for (Unit u: units)
   {
     u.touched = false;
