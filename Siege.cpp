@@ -2,54 +2,65 @@
 
 void Siege::activate() 
 {
-	int shortestPathLength = 1000;
+    int shortestPathLength = 1000;
     std::vector<Loc> path;
     Unit* bestUnit = NULL;
     int bestUnitId = -1;
-
-    Dood _doodType = Dood::WORKER;
-	Water waterBlocking = Water::PATHABLE;
-
+    Dood doodType;
+    Water waterBlocking;
+    
     for (int i = 2 ; i >= 0 ; --i)
     {
-	    if (_doodType == Dood::WORKER)
-	    {
-	        waterBlocking = Water::BLOCKS;
-	    }
+        for (Unit u: _ai.units)
+        {
+            if (u.touched)
+            {
+                continue;
+            }
+            if (u.owner() != _ai.playerID())
+            {
+                continue;
+            }
+            if (u.type() != i)
+            {
+                continue;
+            }
 
-	    for (Unit u: _ai.units)
-	    {
-	        if (u.touched)
-	        {
-	            continue;
-	        }
-	        if (u.owner() != _ai.playerID())
-	        {
-	            continue;
-	        }
-	        if (u.type() != i)
-        	{
-            continue;
-        	}
+            if (Loc(u) == _target)
+            {
+                bestUnitId = u.id();
+                break;
+            }
 
-	        
-	        path = _ai.bfs(u, _target, waterBlocking, u.maxMovement());
+            waterBlocking = Water::PATHABLE;
+            if (i == Dood::WORKER)
+            {
+                waterBlocking = Water::BLOCKS;
+            }
+       
+            path = _ai.bfs(u, _target, waterBlocking, u.maxMovement());
 
-	        if (path.size() < shortestPathLength)
-	        {
-	            bestUnitId = u.id();
-	            shortestPathLength = path.size();
-	        }
-	    }
-	    if (bestUnitId != -1)
-	    {
-	    	continue;
-	    }
+            if (path.size() == 0)
+            {
+                continue;
+            }
+
+            if (path.size() < shortestPathLength)
+            {
+                bestUnitId = u.id();
+                shortestPathLength = path.size();
+            }
+        }
+        if (bestUnitId != -1)
+        {
+            doodType = Dood(i);
+            break;
+        }
     }
  
     if (bestUnitId == -1)
     {
-        _ai.requestSpawn(_doodType, Loc(_target));
+        _ai.requestSpawn(Dood::TANK, Loc(_target));
         return;
     }
 
