@@ -8,6 +8,10 @@ void Siege::activate()
     int bestUnitId = -1;
     Dood doodType;
     Water waterBlocking;
+
+    Unit* bestTarget = NULL;
+    std::vector<Unit> targets;
+    int weakest = 201;
     
     for (int i = 2 ; i >= 0 ; --i)
     {
@@ -75,5 +79,28 @@ void Siege::activate()
         bestUnit->move(path[i].x(), path[i].y());
     }
 
-    // TODO: attack any targets of opportunity
+    for (Unit u: _ai.units)
+    {
+        if (u.owner() != _ai.playerID())
+        {
+            if (manhattanDistance(*bestUnit, u) <= bestUnit->range())
+            {
+                targets.push_back(u);
+            }
+        }
+    }
+
+    for (int i=0 ; i < targets.size() ; ++i)
+    {
+        if (targets[i].healthLeft() < weakest)
+        {
+            weakest = targets[i].healthLeft();
+            bestTarget = &(targets[i]);
+        }
+    }
+
+    if (bestTarget != NULL)
+    {
+        bestUnit->attack(*bestTarget);
+    }
 }
