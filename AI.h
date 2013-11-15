@@ -54,6 +54,7 @@ public:
   std::vector<Loc> bfs(Loc start, Loc end, 
                        Water water, int moveSpeed,
                        Pathing pathing=Pathing::PREDICTABLE) const;
+  std::unordered_map<Loc, Loc> getBlockingGrid(Loc start, Water water, int moveSpeed) const;
   std::vector<Loc> findMySadPump();
   std::vector<Loc> findIceCaps();
   std::vector<Loc> findMyPumps();

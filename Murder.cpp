@@ -1,10 +1,12 @@
 #include <iostream>
+#include <vector>
+#include <algorithm>
 #include "Murder.h"
 #include "AI.h"
 
 using std::cout;
 using std::endl;
-
+using std::vector;
 
 void Murder::activate()
 {
@@ -56,8 +58,37 @@ void Murder::activate()
                    waterBlocking, bestUnit->maxMovement(),
                    Pathing::RANDOMIZED);
 
-    // FIXME: need retreat logic for archers kiting tanks
     int distance = manhattanDistance(*bestUnit, _target);
+    if (distance < bestUnit->range())
+    {
+        std::unordered_map<Loc, Loc> blocking = 
+            _ai.getBlockingGrid(*bestUnit, waterBlocking,
+                                bestUnit->maxMovement());
+        vector<Loc> directions = {
+            Loc( 0, -1), Loc( 0,  1),
+            Loc(-1,  0), Loc( 1,  0)};
+        for (int i = 0 ; i < bestUnit->maxMovement() && distance < bestUnit->range() ; ++i)
+        {
+            std::random_shuffle(directions.begin(), directions.end());
+            for (Loc d: directions)
+            {
+                Loc next = Loc(*bestUnit) + d;
+                if (blocking[d] == Loc(-1, -1))
+                {
+                    int nextDistance = manhattanDistance(next, _target);
+                    if (nextDistance > distance)
+                    {
+                        cout << "MOVING " << bestUnit->id() << " FROM " << bestUnit->x() << " " << bestUnit->y()
+                             << " TO " << next.x() << " " << next.y() << endl;
+                        bestUnit->move(next.x(), next.y());
+                        distance = nextDistance;
+                    }
+                }
+            }
+        }
+    }
+
+    distance = manhattanDistance(*bestUnit, _target);
     if (distance <= bestUnit->range())
     {
         bestUnit->attack(_target);
@@ -66,7 +97,7 @@ void Murder::activate()
 
     for (int i = 0 ; i < bestUnit->maxMovement() && i < path.size() ; ++i)
     {
-        int distance = manhattanDistance(*bestUnit, _target);
+        distance = manhattanDistance(*bestUnit, _target);
         if (distance <= bestUnit->range())
         {
             bestUnit->attack(_target);

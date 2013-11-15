@@ -181,6 +181,48 @@ vector<Loc> AI::bfs(Loc start, Loc end, Water water, int moveSpeed, Pathing path
   return result;
 }
 
+
+std::unordered_map<Loc, Loc> AI::getBlockingGrid(Loc start, Water water, int moveSpeed) const
+{
+  std::unordered_map<Loc, Loc> blockingGrid;
+  Loc blocking(-2, -2);
+  Loc available(-1, -1);
+
+  for (int x = 0 ; x < mapWidth() ; ++x)
+  {
+    for (int y = 0 ; y < mapHeight() ; ++y)
+    {
+      blockingGrid[Loc(x, y)] = available;
+    }
+  }
+
+  for (Unit u: units)
+  {
+    if (manhattanDistance(start, u) <= moveSpeed)
+    {
+      blockingGrid[Loc(u)] = blocking;
+    }
+  }
+
+  for (Tile t: tiles)
+  {
+    if (water == Water::BLOCKS && t.waterAmount() > 0) // water
+    {
+      blockingGrid[Loc(t)] = blocking;
+    }
+    if (t.owner() == 3) // ice
+    {
+      blockingGrid[Loc(t)] = blocking;
+    }
+    if (t.owner() == (1 - playerID()) && t.pumpID() == -1) // his spawn point
+    {
+      blockingGrid[Loc(t)] = blocking;
+    }
+  }
+
+  return blockingGrid;
+}
+
 AI::AI(Connection* conn) : BaseAI(conn) {}
 
 const char* AI::username()
