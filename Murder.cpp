@@ -53,7 +53,8 @@ void Murder::activate()
 
     bestUnit->touched = true;
     path = _ai.bfs(*bestUnit, _target, 
-                   waterBlocking, bestUnit->maxMovement());
+                   waterBlocking, bestUnit->maxMovement(),
+                   Pathing::RANDOMIZED);
 
     // FIXME: need retreat logic for archers kiting tanks
     int distance = manhattanDistance(*bestUnit, _target);

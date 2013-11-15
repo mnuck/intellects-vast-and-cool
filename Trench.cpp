@@ -55,7 +55,8 @@ void Trench::activate()
 
   bestUnit->touched = true;
   path = _ai.bfs(*bestUnit, target,
-                 Water::BLOCKS, bestUnit->maxMovement());
+                 Water::BLOCKS, bestUnit->maxMovement(),
+                 Pathing::RANDOMIZED);
 
 
   for (int i = 0 ; i < bestUnit->maxMovement() && i < path.size() ; ++i)
