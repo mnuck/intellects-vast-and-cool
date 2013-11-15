@@ -22,11 +22,6 @@
 ///The provided AI class does just that.
 class BaseAI
 {
-friend class Moat;
-friend class Murder;
-friend class Siege;
-friend class Spawn;
-friend class Trench;
 
 protected:
   Connection* c;

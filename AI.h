@@ -32,6 +32,12 @@ struct SpawnRequest
 class AI: public BaseAI
 {
 public:
+  friend class Moat;
+  friend class Murder;
+  friend class Siege;
+  friend class Spawn;
+  friend class Trench;
+
   AI(Connection* c);
   virtual const char* username();
   virtual const char* password();
