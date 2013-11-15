@@ -2,6 +2,7 @@
 #include <iostream>
 #include <unordered_map>
 #include <deque>
+#include <algorithm>
 
 #include "AI.h"
 #include "Loc.h"
@@ -87,7 +88,7 @@ void AI::requestSpawn(Dood dood, Loc spawnLoc)
   spawnRequests.push_back(SpawnRequest(dood, spawnLoc));
 }
 
-vector<Loc> AI::bfs(Loc start, Loc end, Water water, int moveSpeed) const
+vector<Loc> AI::bfs(Loc start, Loc end, Water water, int moveSpeed, Pathing pathing) const
 {
   vector<Loc> result;
   std::unordered_map<Loc, Loc> blockingGrid;
@@ -163,10 +164,19 @@ vector<Loc> AI::bfs(Loc start, Loc end, Water water, int moveSpeed) const
       }
     };
 
-    checkLoc(current + Loc( 0, -1));  // north
-    checkLoc(current + Loc( 0,  1));  // south
-    checkLoc(current + Loc(-1,  0));  // east
-    checkLoc(current + Loc( 1,  0));  // west
+    vector<Loc> directions = {
+      Loc( 0, -1), Loc( 0,  1),
+      Loc(-1,  0), Loc( 1,  0)};
+
+    if (pathing == Pathing::RANDOMIZED)
+    {
+      std::random_shuffle(directions.begin(), directions.end());
+    }
+
+    for (Loc l: directions)
+    {
+      checkLoc(current + l);
+    }
   }
   return result;
 }

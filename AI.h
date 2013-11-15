@@ -16,9 +16,15 @@ enum class Water
 //Enum for spawning units
 enum Dood
 {
-    WORKER,
-    SCOUT,
-    TANK,
+  WORKER,
+  SCOUT,
+  TANK
+};
+
+enum class Pathing
+{
+  RANDOMIZED,
+  PREDICTABLE
 };
 
 struct SpawnRequest
@@ -45,7 +51,9 @@ public:
   virtual bool run();
   virtual void end();
 
-  std::vector<Loc> bfs(Loc start, Loc end, Water water, int moveSpeed) const;
+  std::vector<Loc> bfs(Loc start, Loc end, 
+                       Water water, int moveSpeed,
+                       Pathing pathing=Pathing::PREDICTABLE) const;
   std::vector<Loc> findMySadPump();
   std::vector<Loc> findIceCaps();
   std::vector<Loc> findMyPumps();
