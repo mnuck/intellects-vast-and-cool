@@ -76,4 +76,10 @@ void Siege::activate()
     bestUnit->touched = true;
     path = _ai.bfs(*bestUnit, _target, 
                    waterBlocking, bestUnit->maxMovement());
+    for (int i = 0 ; i < bestUnit->maxMovement() && i < path.size() ; ++i)
+    {
+        bestUnit->move(path[i].x(), path[i].y());
+    }
+
+    // TODO: attack any targets of opportunity
 }
